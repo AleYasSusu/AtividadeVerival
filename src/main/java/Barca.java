@@ -4,10 +4,18 @@ public class Barca {
   static final int LUGAR_BLOQUEADO = 2;   
   static final int LUGAR_LIVRE = 3; 
 
-  public int[][] lugares = new int[60][20];
+  public int[][] lugares = new int[61][21];
   private int contador = 0;
   private int fila;
   private int assento;
+
+  public void setFila(int f) {
+    fila = f;
+  }
+
+  public void setAssento(int a) {
+    assento = a;
+  }
 
   private int getFila(String lugar) {
     String str = lugar.substring(1, 3);
@@ -28,8 +36,8 @@ public class Barca {
       return false;
     }
 
-    fila = getFila(lugar);
-    assento =  getAssento(lugar);
+    setFila(getFila(lugar));
+    setAssento(getAssento(lugar));
     return fila >= 1 && fila <= 60 && assento >= 1 && assento <= 20;
   }
 
@@ -65,7 +73,6 @@ public class Barca {
     } catch (Exception e) {
       return false;
     }
-    
   }
 
   public void liberaLugar(String lugar) {
