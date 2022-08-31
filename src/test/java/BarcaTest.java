@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,6 +9,29 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 public class BarcaTest {
   private Barca barca = new Barca();
+
+  public void preenche100Passageiros() {
+    // 100 passageiros nas fileiras de 1 a 5
+    for(int i = 1; i < 6; i++) {
+      for(int j = 1; j < 21; j++) {
+        barca.setFila(i);
+        barca.setAssento(j);
+        barca.ocupaLugar();
+      }
+    }
+  }
+
+  public void preenche200Passageiros() {
+    preenche100Passageiros();
+    // 100 passageiros nas fileiras de 40 a 44
+    for(int i = 40; i < 45; i++) {
+      for(int j = 1; j < 21; j++) {
+        barca.setFila(i);
+        barca.setAssento(j);
+        barca.ocupaLugar();
+      }
+    }
+  }
 
   @ParameterizedTest
   @CsvSource({
@@ -93,13 +117,7 @@ public class BarcaTest {
   
     @BeforeAll
     public void populaLugares() {
-      for(int i = 1; i < 6; i++) {
-        for(int j = 1; j < 21; j++) {
-          barca.setFila(i);
-          barca.setAssento(j);
-          barca.ocupaLugar();
-        }
-      }
+      preenche100Passageiros();
     }
 
     @ParameterizedTest
@@ -157,20 +175,7 @@ public class BarcaTest {
   
     @BeforeAll
     public void populaLugares() {
-      for(int i = 1; i < 6; i++) {
-        for(int j = 1; j < 21; j++) {
-          barca.setFila(i);
-          barca.setAssento(j);
-          barca.ocupaLugar();
-        }
-      }
-      for(int i = 40; i < 45; i++) {
-        for(int j = 1; j < 21; j++) {
-          barca.setFila(i);
-          barca.setAssento(j);
-          barca.ocupaLugar();
-        }
-      }
+      preenche200Passageiros();
     }
 
     @ParameterizedTest
@@ -205,5 +210,75 @@ public class BarcaTest {
       int rObs = barca.verificaLugar(lugar);
       Assertions.assertEquals(rEsp, rObs);
     }
+  }
+
+  @Test
+  public void testaPassageiro100() {
+    // 99 passageiros nas fileiras de 1 a 5
+    for(int i = 1; i < 6; i++) {
+      for(int j = 1; j < 21; j++) {
+        if(i != 5 && j != 20) {
+          barca.setFila(i);
+          barca.setAssento(j);
+          barca.ocupaLugar();
+        }
+      }
+    }
+
+    int rEspOcupado = 1;
+    int rObs = barca.verificaLugar("F01A01");
+    Assertions.assertEquals(rEspOcupado, rObs);
+
+    int rEspBloqueado = 2;
+    rObs = barca.verificaLugar("F21A01");
+    Assertions.assertEquals(rEspBloqueado, rObs);
+
+    int rEspLivre = 3;
+    rObs = barca.verificaLugar("F20A01");
+    Assertions.assertEquals(rEspLivre, rObs);
+  }
+
+  @Test
+  public void testaPassageiro200() {
+    preenche100Passageiros();
+    // 99 passageiros nas fileiras de 40 a 44
+    for(int i = 40; i < 45; i++) {
+      for(int j = 1; j < 21; j++) {
+        if (i != 44 && j != 20) {
+          barca.setFila(i);
+          barca.setAssento(j);
+          barca.ocupaLugar();
+        }
+      }
+    }
+
+    int rEspOcupado = 1;
+    int rObs = barca.verificaLugar("F40A01");
+    Assertions.assertEquals(rEspOcupado, rObs);
+
+    int rEspBloqueado = 2;
+    rObs = barca.verificaLugar("F39A20");
+    Assertions.assertEquals(rEspBloqueado, rObs);
+
+    int rEspLivre = 3;
+    rObs = barca.verificaLugar("F60A20");
+    Assertions.assertEquals(rEspLivre, rObs);
+  }
+
+  @Test
+  public void testaPassageiro201() {
+    preenche200Passageiros();
+
+    int rEspOcupado = 1;
+    int rObs = barca.verificaLugar("F40A01");
+    Assertions.assertEquals(rEspOcupado, rObs);
+    rObs = barca.verificaLugar("F01A01");
+    Assertions.assertEquals(rEspOcupado, rObs);
+
+    int rEspLivre = 3;
+    rObs = barca.verificaLugar("F21A20");
+    Assertions.assertEquals(rEspLivre, rObs);
+    rObs = barca.verificaLugar("F39A01");
+    Assertions.assertEquals(rEspLivre, rObs);
   }
 }
