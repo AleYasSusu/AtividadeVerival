@@ -75,7 +75,7 @@ public class Barca {
     }
   }
 
-  public void liberaLugar(String lugar) {
+  public void liberaLugar() {
     lugares[fila][assento] = 0;
     contador--;
   }
